@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SUMER (Summarizing Multiomics Enrichment Analysis Results)</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.12/cytoscape.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-cose-bilkent@4.0.0/cytoscape-cose-bilkent.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-graphml@1.0.5/cytoscape-graphml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dagre@0.8.2/dist/dagre.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.2.1/cytoscape-dagre.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-panzoom@2.5.2/cytoscape-panzoom.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.6/chosen.jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-view-utilities@2.1.0/cytoscape-view-utilities.js"></script>
+<!-- d3 only used for setting color gradient-->
+<script src="https://d3js.org/d3-array.v1.min.js"></script>
+<script src="https://d3js.org/d3-collection.v1.min.js"></script>
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-format.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale.v2.min.js"></script>
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-42098540-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<link href="https://cdn.jsdelivr.net/npm/cytoscape-panzoom@2.5.2/cytoscape.js-panzoom.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.6/chosen.min.css">
+<link rel="icon" type="image/png" href="https://s3-us-west-2.amazonaws.com/sumer-r-app/favicon.ico">
+<style>
+body {font-family: "Roboto",sans-serif;}
+h4{
+  color:#F39C12;
+  background-color:#f4f5f7;
+  padding:5px;
+}
+a:link {
+  color:#008080;
+}
+a:visited {
+  color:#008080;
+}
+a:hover {
+  color:#ffcc00;
+  text-decoration: none;
+}
+/* button style from chosen js */
+.chosen-button {
+	background: #fafafa;
+	background: -webkit-linear-gradient(top, #ffffff, #eeeeee);
+	background: -moz-linear-gradient(top, #ffffff, #eeeeee);
+	background: -o-linear-gradient(top, #ffffff, #eeeeee);
+	background: linear-gradient(to bottom, #ffffff, #eeeeee);
+	border: 1px solid #bbbbbb;
+	border-radius: 4px;
+	box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+	color: #555555;
+	cursor: pointer;
+	display: inline-block;
+	font-family: "Helvetica Neue", Arial, Verdana, "Nimbus Sans L", sans-serif;
+	font-size: 12px;
+	font-weight: 500;
+	height: 26px;
+	line-height: 26px;
+	outline: none;
+	padding: 0 10px;
+	text-shadow: 0 1px 0 white;
+	text-decoration: none;
+	vertical-align: middle;
+	white-space: nowrap;
+	-webkit-font-smoothing: antialiased;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+td.zero {
+  font-size: 32px;
+  font-weight: bold;
+  color:#B7B1B1;
+}
+td.nonzero {
+  font-size: 32px;
+  font-weight: bold;
+}
+.boxed {
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color:#F4F6F6;
+  width: 50%;
+  margin-bottom:20px;
+  padding-right:10px;
+}
+#apcy {
+  width:1200px;
+  height:1200px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+#cy_toolbar {
+  height:40px;
+  width:1220px;
+  margin-bottom:0px;
+}
+#genelevel a:link {color:#008080;}
+#genelevel a:visited {color:#008080;}
+#genelevel a:hover {color:#ffcc00;
+ text-decoration: none;}
+.columnheader{
+  font-family: "Roboto Mono", monospace;
+  font-size: 16px;
+  font-weight:bold;
+}
+.breadcrumb-arrow {
+  height: 36px;
+  padding: 0;
+  line-height: 36px;
+  list-style: none;
+  background-color: #e6e9ed
+}
+.breadcrumb-arrow li:first-child a {
+  border-radius: 4px 0 0 4px;
+  -webkit-border-radius: 4px 0 0 4px;
+  -moz-border-radius: 4px 0 0 4px
+}
+.breadcrumb-arrow li, .breadcrumb-arrow li a, .breadcrumb-arrow li span {
+  display: inline-block;
+  vertical-align: top
+}
+.breadcrumb-arrow li:not(:first-child) {
+    margin-left: -5px
+}
+.breadcrumb-arrow li+li:before {
+    padding: 0;
+    content: ""
+}
+.breadcrumb-arrow li span {
+    padding: 0 10px
+}
+.breadcrumb-arrow li a, .breadcrumb-arrow li:not(:first-child) span {
+    height: 36px;
+    padding: 0 10px 0 25px;
+    line-height: 36px
+}
+.breadcrumb-arrow li:first-child a {
+    padding: 0 10px
+}
+.breadcrumb-arrow li a {
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+    background-color: #3bafda;
+    border: 0px solid #3bafda
+}
+.breadcrumb-arrow li:first-child a {
+    padding-left: 10px
+}
+.breadcrumb-arrow li a:after, .breadcrumb-arrow li a:before {
+    position: absolute;
+    top: -1px;
+    width: 0;
+    height: 0;
+    content: '';
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent
+}
+.breadcrumb-arrow li a:before {
+    right: -10px;
+    z-index: 3;
+    border-left-color: #3bafda;
+    border-left-style: solid;
+    border-left-width: 11px
+}
+.breadcrumb-arrow li a:after {
+    right: -11px;
+    z-index: 2;
+    border-left: 11px solid #2494be
+}
+.breadcrumb-arrow li a:focus, .breadcrumb-arrow li a:hover {
+    background-color: #4fc1e9;
+    border: 0px solid #4fc1e9
+}
+.breadcrumb-arrow li a:focus:before, .breadcrumb-arrow li a:hover:before {
+    border-left-color: #4fc1e9
+}
+.breadcrumb-arrow li a:active {
+    background-color: #2494be;
+    border: 1px solid #2494be
+}
+.breadcrumb-arrow li a:active:after, .breadcrumb-arrow li a:active:before {
+    border-left-color: #2494be
+}
+.breadcrumb-arrow li span {
+    color: #434a54
+}
+</style>
+<script>
+var colorPicker = d3.scaleLinear().domain([0, 0.5, 1.0]).range(["blue", "white", "red"]);
+
+function base64ToBlob(b64Data, contentType, sliceSize) {
+  contentType = contentType || '';
+  sliceSize = sliceSize || 512;
+  var byteCharacters = atob(b64Data);
+  var byteArrays = [];
+
+  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    var slice = byteCharacters.slice(offset, offset + sliceSize);
+    var byteNumbers = new Array(slice.length);
+    for (var i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+    var byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+  var blob = new Blob(byteArrays, {type: contentType});
+  return blob;
+}
+$(function(){
+  /* smooth scrolling */
+  $('a[href="#top"]').on('click', function(event) {
+      event.preventDefault();
+      $('html, body').animate({
+        scrollTop: 0
+      }, 500);
+      return false;
+  });
+  /* export data */
+  $("#cytscp_exp_btn").on("click", function(e){
+    var type = $("#cytscp_exp_sel").val();
+    if(type == "png"){
+      var b64key = 'base64,';
+      var b64 = cy.png().substring(cy.png().indexOf(b64key) + b64key.length );
+      var imgBlob = base64ToBlob( b64, 'image/png' );
+      saveAs(imgBlob, 'sumer_ap_cluster.png' );
+    } else if(type == "json"){
+      var jsonBlob = new Blob([JSON.stringify( cy.json() ) ], { type: 'application/javascript;charset=utf-8' });
+      saveAs(jsonBlob, 'sumer_ap_cluster.json');
+    } else if(type == "graphml"){
+      var blob = new Blob([cy.graphml()], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, 'sumer_ap_cluster.graphml');
+    }
+  });
+
+ /* data is now embedded in html */
+  /* var apjson =  $('#apcy').data('apjson'); */
+  var cy, ur;
+  var jsonA;
+  /* create cytoscape graph for apcluster results */
+    apjson = JSON.parse(apjson);
+    jsonA = apjson["vis"];
+    cy = cytoscape({
+      container: document.getElementById('apcy'),
+      elements: jsonA,
+      layout: {
+          name:"cose-bilkent",
+          animate: false
+      },
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'background-color': function(ele){
+              var eData = ele.data();
+             //color BWR
+              var curV = colorPicker(eData["color"]);
+              return curV;
+            },
+            'width': function(ele){
+              var eData=ele.data();
+              return eData["nSize"];
+            },
+            'height':function(ele){
+              var eData=ele.data();
+              return eData["nSize"];
+            },
+            'font-size': function(ele){
+              var eData=ele.data();
+              if(eData["is_exemplar"]==2){
+                return 50;
+              } else if(eData["is_exemplar"]==1){
+                return 20;
+              } else{
+                return 10;
+              }
+            },
+            'color': function(ele){
+              var eData=ele.data();
+              if(eData["is_exemplar"] == 2){
+                return "#000";
+              } else {
+                return "#736F6E";
+              }
+            },
+            'font-weight':'bold',
+            'border-width':'1px',
+            'border-color':'gray',
+            'shape': function(ele){
+              var eData = ele.data();
+              /* for now, support up to 3 platforms */
+              if(eData["platform"] == 1){
+                return "ellipse";
+              } else if (eData["platform"] == 2){
+                return "star";
+             }else if(eData["platform"] == 3){
+                return "pentagon";
+             } else if (eData["platform"] == 4){
+                return "triangle";
+             }else if(eData["platform"] == 5){
+                return "roundrectangle";
+             }else if(eData["platform"] == 6){
+                return "diamond";
+             }else if(eData["platform"] == 7){
+               return "hexagon";
+             } else {
+               return "rhomboid";
+             }
+            },
+            'content': function(ele){
+              var eData = ele.data();
+              return eData["id"];
+              /*
+                if(eData["is_exemplar"] == 1){
+                  return eData["id"];
+                } else {
+                  return "";
+                }
+               */
+            }
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'width': function(ele){
+              var eData = ele.data();
+              if(eData["level"] == 1) {
+                return 3;
+              } else{
+                return 10;
+              }
+            }
+          }
+        }
+      ]
+    });
+       cy.panzoom();
+    var tappedBefore;
+    var api = cy.viewUtilities({
+      node: {
+        highlighted: {
+        'background-color':'green'}, // styles for when nodes are highlighted.
+        unhighlighted: {// styles for when nodes are unhighlighted.
+          'opacity': 0.3
+        }
+      },
+      neighbor: function(node){
+        return node.closedNeighborhood();
+      },
+      neighborSelectTime: 1000
+    });
+    cy.on('tap', 'node', function(event) {
+      var node = this;
+      var tappedNow = node;
+      api.removeHighlights();
+      api.highlight(node);
+      if (tappedBefore && tappedBefore.id() === tappedNow.id()) {
+        api.removeHighlights();
+        tappedBefore = null;
+      } else{
+        tappedBefore = tappedNow;
+      }
+    });
+
+    cy.on('tap', function(event){
+      var evtTarget = event.target;
+      console.log(evtTarget);
+      if(evtTarget == cy){
+        tappedBefore = null;
+        api.removeHighlights();
+      }
+    });
+
+    cy.on('mouseover', 'node', function(event){
+      if(tappedBefore == null){
+        var node = this;
+        api.removeHighlights();
+        api.highlightNeighbors(node);
+      }
+    });
+
+    cy.on('mouseout', 'node', function(event){
+      if(tappedBefore == null){
+        api.removeHighlights();
+      }
+    });
+    $(".chzn-layout-select").chosen({disable_search_threshold: 5}).change(function(){
+      var layout_name = $(this).val(); // get selected value
+      var layout = cy.layout({
+        name: layout_name,
+        animate: true
+      });
+      layout.run();
+    });
+
+    $(".chzn-cy-search-select").chosen({disable_search_threshold: 0}).change(function(){
+      var node_name = $(this).val();
+      var filter_string = "node[id = '" + node_name + "']";
+      var filtered = cy.filter(filter_string);
+      var api = cy.viewUtilities();
+      tappedBefore = filtered;
+      api.removeHighlights();
+      api.highlight(filtered);
+    });
+
+    $(".chzn-cy-export").chosen({disable_search_threshold: 5}).change(function(){
+    });
+});
+</script>
+</head>

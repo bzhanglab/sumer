@@ -1,0 +1,64 @@
+---
+title: "Summarizing Multiomics Enrichment Analysis Results"
+#author: "Zhiao Shi"
+#date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The main function of the package is `sumer()`. This function takes two parameters. The first parameter is the name of 
+a file in json format that specifies the location of input data files for each omics platform.  The second parameter
+specifies the location of output files.
+Currently, enrichment results from up to 3 platforms can be summarized with `sumer()`.  
+
+A sample configuration file is shown below:
+
+```{js}
+[
+  {
+    "platform_name":"rna-seq",
+    "platform_abbr":"rna",
+    "gmt_file":"/data/rna_seq.gmt",
+    "score_file":"/data/rna_seq_score.txt"
+  },
+  {
+    "platform_name":"proteomics",
+    "platform_abbr": "pro",
+    "gmt_file":"/data/proteomics.gmt",
+    "score_file":"/data/proteomics_score.txt"
+  },
+  {
+    "platform_name":"phospho-proteomics",
+    "platform_abbr": "phospho",
+    "gmt_file":"/data/phospho_proteomics.gmt",
+    "score_file":"/data/phospho_proteomics_score.txt"
+  }
+]
+```
+
+The `gmt_file` specifies a tab delimited file that provides gene set information. Each row describes a gene set, the first 
+column indicates the name of the gene set and the optional second column the description. The rest of columns 
+list the genes included in the set. This is the same format as described [here](https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29).
+
+The `score_file` .
+
+<!-- 
+http://aws1.zhang-lab.org/WebGestaltReporter/CPTAC3_Endometrium_BCM_3/mi-pathway-4e460f3e3b999b728f92b2ed30f15f44.html
+proteomics:
+setwd("/home/zhiaos/projects/WebGestaltReport_support/output/CPTAC3_Endometrium_BCM_3/1857c034fbe3462a9ab0807c1c7d6fc0")
+load("4e460f3e3b999b728f92b2ed30f15f44.RData")
+phosphoproteomics:
+setwd("/home/zhiaos/projects/WebGestaltReport_support/output/CPTAC3_Endometrium_BCM_3/58f8e3cd88474d8c99226c5fe8653ccd")
+load("4e460f3e3b999b728f92b2ed30f15f44.RData")
+-->
+
