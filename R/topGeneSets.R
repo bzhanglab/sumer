@@ -68,7 +68,7 @@ topGeneSets <- function(cur_config, geneset_ids, geneset_info, output_dir, prefi
 		geom_bar(stat = "identity", col = "black") +
 		geom_text(aes(y = label_y, label = short.name, hjust = label_hjust)) +
 		coord_flip() +
-		scale_fill_manual(values = c(a = "firebrick1", b = "dodgerblue")) +
+		scale_fill_manual(values = c(a = "#e78ac3", b = "#8da0cb")) +
 		#scale_fill_manual(values = c(a = "forestgreen", b = "goldenrod")) +
 		theme_minimal() +
 		theme(axis.text.y = element_blank(),

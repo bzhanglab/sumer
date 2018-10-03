@@ -27,6 +27,10 @@ sumer <- function(config_file, output_dir, n_threads=4){
   config <- full_config$data
   n_platform <- nrow(config)
   all_platform_abbr <- c()
+
+  # plot the original data
+  all_data <- data.frame(platfrom=character(), name=character(), size=integer(), score=numeric)
+
   # save the name of output directory for each platform
   work_dirs <- list()
   for(i in seq_len(n_platform)){
@@ -39,7 +43,8 @@ sumer <- function(config_file, output_dir, n_threads=4){
     cur_config <- config[i,]
     cur_config <- cbind(cur_config, top_num=full_config$top_num)
     cur_platform <- cur_config[["platform_name"]]
-    all_platform_abbr <- c(all_platform_abbr, cur_config[["platform_abbr"]])
+    cur_platform_abbr <- cur_config[["platform_abbr"]]
+    all_platform_abbr <- c(all_platform_abbr, cur_platform_abbr)
     work_dirs[[cur_platform]] <- work_dir
     print(paste0("platform: ", cur_platform))
     geneset_ids <- gmt2list(cur_config[["gmt_file"]])
@@ -52,12 +57,31 @@ sumer <- function(config_file, output_dir, n_threads=4){
     save(geneset_info, geneset_ids, file=file.path(cur_output_dir, "genesets.RData"))
     top_ret <- topGeneSets(cur_config, geneset_ids, geneset_info, cur_output_dir)
     sc_ret <- topSCGeneSets(cur_config, geneset_ids, geneset_info, cur_output_dir, n_threads)
+
+    # order by name
+    geneset_ids <- geneset_ids[order(names(geneset_ids))]
+    geneset_info <- geneset_info[order(names(geneset_info))]
+    set_platfrom <- rep(cur_platform_abbr, length(geneset_ids))
+    set_name <- names(geneset_ids)
+    set_size <-  unname(sapply(geneset_ids, length))
+    set_score <- unname(sapply(geneset_info, "as.double"))
+    all_data <- rbind(all_data, data.frame(platform=set_platfrom, name=set_name, size=set_size, score=set_score, stringsAsFactors=FALSE))
   }
+  save(all_data, file=file.path(output_dir, "all_data.RData"))
+  # plot
+  pdf(NULL)
+  theme_set(theme_bw())
+  myplot <- ggplot(all_data, aes(x=platform, y=score, color=platform)) +
+    scale_color_manual(values=c("#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d")) +
+    geom_jitter(aes(size=size), width = 0.25) + guides(color=FALSE) +
+    theme(legend.key = element_rect(color=NA, fill = NA))
+
+  ggsave(file.path(output_dir, "all_data.png"), dpi = 300, myplot)
+  ggsave(file.path(output_dir, "all_data.pdf"), myplot)
+  dev.off()
+
 
   # do AP clustering
-  ap_input_data <- data.frame(platform=character(), data_dir=character(), set_name=character(),
-                              set_size=integer(), set_genes=character(), sig_score=numeric())
-
   ap_data <- list()
   ap_data$output.dir <- output_dir
   ap_data$md5val <- "sumer"
@@ -91,7 +115,14 @@ sumer <- function(config_file, output_dir, n_threads=4){
 
   # add results to webpage
   cat("<div style=\"margin-left:10px\" id=\"results\">", file=output_index_file, append=TRUE)
-  cat("<h4> Top gene sets (up to ", full_config$top_num, ") by set cover </h4>\n", file=output_index_file,append=TRUE,sep="")
+  cat("<h4> Original gene sets</h4>\n", file=output_index_file,append=TRUE,sep="")
+
+  cat("<div id=\"originalsets\">\n", file=output_index_file, append=TRUE)
+  original_file_link <- "all_data.pdf"
+  original_png_file_link <- "all_data.png"
+  image_width <- min(300*n_platform, 1200)
+  cat("<a href=\"", original_file_link, "\" download><img id=\"original_data\" width=\"", image_width, "px\" src=\"", original_png_file_link, "\" alt=\"original data\"></a>\n</div>\n", file=output_index_file, append=TRUE, sep="")
+  cat("\n</div>\n<h4> Top gene sets (up to ", full_config$top_num, ") by set cover </h4>\n", file=output_index_file,append=TRUE,sep="")
   cat("<div id=\"topsets\" style=\"display: grid; grid-template-columns: 1fr 1fr 1fr;\">\n", file=output_index_file, append=TRUE)
   for(i in seq_len(n_platform)) {
     cur_config <- config[i,]
