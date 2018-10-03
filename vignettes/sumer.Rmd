@@ -17,48 +17,74 @@ knitr::opts_chunk$set(
 ```
 
 The main function of the package is `sumer()`. This function takes two parameters. The first parameter is the name of 
-a file in json format that specifies the location of input data files for each omics platform.  The second parameter
-specifies the location of output files.
-Currently, enrichment results from up to 3 platforms can be summarized with `sumer()`.  
+a file in json format that, among other things, specifies the location of input data files for each omics platform.  The second parameter
+specifies the location of output files. Currently, enrichment results from up to 7 platforms can be summarized with `sumer()`.  
+
+```r
+sumer("/path/to/config.json", "/path/to/output_dir")
+```
 
 A sample configuration file is shown below:
 
-```{js}
-[
-  {
-    "platform_name":"rna-seq",
-    "platform_abbr":"rna",
-    "gmt_file":"/data/rna_seq.gmt",
-    "score_file":"/data/rna_seq_score.txt"
-  },
-  {
-    "platform_name":"proteomics",
-    "platform_abbr": "pro",
-    "gmt_file":"/data/proteomics.gmt",
-    "score_file":"/data/proteomics_score.txt"
-  },
-  {
-    "platform_name":"phospho-proteomics",
-    "platform_abbr": "phospho",
-    "gmt_file":"/data/phospho_proteomics.gmt",
-    "score_file":"/data/phospho_proteomics_score.txt"
-  }
-]
+```js
+{
+  "project":"My study",
+  "top_num": 50,
+  "data": [
+    {
+      "platform_name":"rna-seq",
+      "platform_abbr":"rna",
+      "gmt_file":"/data/rna_seq.gmt",
+      "score_file":"/data/rna_seq_score.txt"
+    },
+    {
+      "platform_name":"proteomics",
+      "platform_abbr": "pro",
+      "gmt_file":"/data/proteomics.gmt",
+      "score_file":"/data/proteomics_score.txt"
+    },
+    {
+      "platform_name":"phospho-proteomics",
+      "platform_abbr": "phospho",
+      "gmt_file":"/data/phospho_proteomics.gmt",
+      "score_file":"/data/phospho_proteomics_score.txt"
+    }
+  ]
+}
 ```
 
-The `gmt_file` specifies a tab delimited file that provides gene set information. Each row describes a gene set, the first 
-column indicates the name of the gene set and the optional second column the description. The rest of columns 
+The keys for the configuration file are explained in the following table.
+
+| name                | description                                                  |
+|---------------------|--------------------------------------------------------------|
+| project             | a brief description for your project                         |
+| top_num             | maximum number of top sets selected by set cover algorithm   |
+| data                | an array of objects that describe the data for each platform |
+|                     |                                                              |
+|            platform | the name of platform                                         |
+|       platform_abbr | the abbreviation of the platform name                        |
+|            gmt_file | the path to the gmt file                                     |
+|          score_file | the path to the score file                                   |
+
+
+The `gmt_file` specifies a tab delimited file that provides gene set information. Each row describes a gene set where the first 
+column lists the name of gene set and the optional second column a brief description of the set. The rest of columns 
 list the genes included in the set. This is the same format as described [here](https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#GMT:_Gene_Matrix_Transposed_file_format_.28.2A.gmt.29).
 
-The `score_file` .
+The `score_file` lists the measurement of significance for each gene set. There is one row for each gene set. The first column 
+is the gene set name and second column is the score for the set. Typical examples of the score value are signed $-\log\{\mbox{p-value}\}$ or signed
+$-\log\{\mbox{FDR}\}$. Columns are separated by tab.
 
-<!-- 
-http://aws1.zhang-lab.org/WebGestaltReporter/CPTAC3_Endometrium_BCM_3/mi-pathway-4e460f3e3b999b728f92b2ed30f15f44.html
-proteomics:
-setwd("/home/zhiaos/projects/WebGestaltReport_support/output/CPTAC3_Endometrium_BCM_3/1857c034fbe3462a9ab0807c1c7d6fc0")
-load("4e460f3e3b999b728f92b2ed30f15f44.RData")
-phosphoproteomics:
-setwd("/home/zhiaos/projects/WebGestaltReport_support/output/CPTAC3_Endometrium_BCM_3/58f8e3cd88474d8c99226c5fe8653ccd")
-load("4e460f3e3b999b728f92b2ed30f15f44.RData")
--->
+The gene set names in `gmt_file` and `score_file` should match.
 
+To run the sample data provided by the package, first make sure the working directory (`/path/to/your_work_dir`) and 
+output directory (`/path/to/your_output_dir`) exist in your system.
+
+```r
+> setwd("/path/to/your_work_dir")
+> file.copy(system.file("data", "sample.tgz", package="sumer"), ".")
+> untar("sample.tgz")
+> sumer("config.json", "/path/to/your_output_dir")
+```
+
+The final output files are in `your_output_dir`. You can open `index.html` to explore the summarized results. 
