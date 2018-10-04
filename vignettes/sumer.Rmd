@@ -2,6 +2,8 @@
 title: "Summarizing Multiomics Enrichment Analysis Results"
 #author: "Zhiao Shi"
 #date: "`r Sys.Date()`"
+header-includes:  
+  - \let\centering\relax
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -55,16 +57,56 @@ A sample configuration file is shown below:
 
 The keys for the configuration file are explained in the following table.
 
-| name                | description                                                  |
-|---------------------|--------------------------------------------------------------|
-| project             | a brief description for your project                         |
-| top_num             | maximum number of top sets selected by set cover algorithm   |
-| data                | an array of objects that describe the data for each platform |
-|                     |                                                              |
-|            platform | the name of platform                                         |
-|       platform_abbr | the abbreviation of the platform name                        |
-|            gmt_file | the path to the gmt file                                     |
-|          score_file | the path to the score file                                   |
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+.tg .tg-h6ay{background-color:#f9f9f9;border-color:inherit;text-align:left}
+.tg .tg-v47y{font-weight:bold;border-color:#000000;text-align:left}
+.tg .tg-xldj{border-color:inherit;text-align:left}
+.tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+</style>
+<table class="tg" style="margin-top:10px; margin-left:0px;width:100%;">
+  <tr>
+    <th class="tg-v47y">name</th>
+    <th class="tg-v47y">description</th>
+  </tr>
+  <tr>
+    <td class="tg-h6ay">project</td>
+    <td class="tg-h6ay">a brief description for your project</td>
+  </tr>
+  <tr>
+    <td class="tg-xldj">top_num</td>
+    <td class="tg-xldj">maximum number of top sets selected by set cover algorithm</td>
+  </tr>
+  <tr>
+    <td class="tg-btxf">data               </td>
+    <td class="tg-btxf">an array of objects that describe the data for each platform</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-btxf">platform</td>
+    <td class="tg-btxf">name of platform</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">platform_abbr</td>
+    <td class="tg-0pky">abbreviation of the platform name</td>
+  </tr>
+  <tr>
+    <td class="tg-btxf"> gmt_file</td>
+    <td class="tg-btxf">path to the gmt file</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">score_file</td>
+    <td class="tg-0pky">path to the score file</td>
+  </tr>
+</table>
+
+
 
 
 The `gmt_file` specifies a tab delimited file that provides gene set information. Each row describes a gene set where the first 
