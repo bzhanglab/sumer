@@ -9,6 +9,14 @@ sumer <- function(config_file, output_dir, n_threads=4){
     dir.create(output_dir)
   }
   output_index_file <- file.path(output_dir, "index.html")
+  if(file.exists(output_index_file)){
+    overwrite <- readline(prompt="Output directory not empty, do you want to overwrite existing output? (enter Y or N)")
+    if(toupper(overwrite) != 'Y'){
+      return(0)    
+    } else{
+      file.remove(output_index_file)
+    }
+  }
   conn <- file(system.file("assets", "head.html", package="sumer"), open="r")
   lines <- readLines(conn)
   for (i in 1:length(lines)){
