@@ -12,7 +12,7 @@ sumer <- function(config_file, output_dir, n_threads=4){
   if(file.exists(output_index_file)){
     overwrite <- readline(prompt="Output directory not empty, do you want to overwrite existing output? (enter Y or N)")
     if(toupper(overwrite) != 'Y'){
-      return(0)    
+      return(0)
     } else{
       file.remove(output_index_file)
     }
@@ -131,7 +131,7 @@ sumer <- function(config_file, output_dir, n_threads=4){
   image_width <- min(300*n_platform, 1200)
   cat("<a href=\"", original_file_link, "\" download><img id=\"original_data\" width=\"", image_width, "px\" src=\"", original_png_file_link, "\" alt=\"original data\"></a>\n</div>\n", file=output_index_file, append=TRUE, sep="")
   cat("\n</div>\n<h4> Top gene sets (up to ", full_config$top_num, ") by set cover </h4>\n", file=output_index_file,append=TRUE,sep="")
-  cat("<div id=\"topsets\" style=\"display: grid; grid-template-columns: 1fr 1fr 1fr;\">\n", file=output_index_file, append=TRUE)
+  cat("<div id=\"topsets\" style=\"overflow:scroll;display: grid; grid-template-columns: 1fr 1fr 1fr;\">\n", file=output_index_file, append=TRUE)
   for(i in seq_len(n_platform)) {
     cur_config <- config[i,]
     cur_platform <- cur_config[["platform_name"]]
