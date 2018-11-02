@@ -53,7 +53,14 @@ topGeneSets <- function(cur_config, geneset_ids, geneset_info, output_dir, prefi
 
   # geneset name has category information
   # remove that before plotting
-  short.name <- unname(sapply(plot.df$name,function(x){strsplit(x,"__",fixed=TRUE)[[1]][2]}))
+	# if geneset name contains "__", remove anything before __
+  short.name <- unname(sapply(plot.df$name,function(x){
+      if(grepl("__", x)){
+       strsplit(x,"__",fixed=TRUE)[[1]][2]
+      } else{
+        return(x)
+      }
+     }))
   plot.df$short.name <- short.name
 
   `%>%` <- magrittr::`%>%`
