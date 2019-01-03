@@ -2,6 +2,10 @@
 #' @importFrom parallel mclapply
 # Size constrained weighted set cover problem
 weightedSetCover <- function(cur_config, geneset_ids, geneset_info, output_dir, n_threads){
+  # mclapply on windows must set mc.cores = 1
+  if(Sys.info()[['sysname']] == 'Windows'){
+    n_threads <- 1
+  }
   `%>%` <- magrittr::`%>%`
   # we only start with the top (multiplier * top_k) most
   # significant sets to reduce computational cost
