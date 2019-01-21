@@ -1,1 +1,1 @@
-An R package for summarizing multiomics enrichment analysis results
+An R package for summarizing multiple enrichment analysis results
