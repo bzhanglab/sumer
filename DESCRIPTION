@@ -1,6 +1,6 @@
 Package: sumer
 Title: SUmmarizing Multiomics Enrichment analysis Results
-Version: 1.0
+Version: 1.1
 Authors@R: person("Zhiao", "Shi", email = "zhiao.shi@gmail.com", role = c("aut", "cre"))
 Description: Summarizes gene set and pathway enrichment analysis results from multiomics platforms with weighted
              set cover and affinity propagation clustering algorithms. It therefore reduces redundancy among enriched 

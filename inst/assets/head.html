@@ -98,16 +98,11 @@ td.nonzero {
   padding-right:10px;
 }
 #apcy {
-  width:1200px;
+  width:1600px;
   height:1200px;
   padding: 10px;
   border: 1px solid gray;
   border-radius: 5px;
-}
-#cy_toolbar {
-  height:40px;
-  width:1220px;
-  margin-bottom:0px;
 }
 #genelevel a:link {color:#008080;}
 #genelevel a:visited {color:#008080;}
@@ -200,6 +195,27 @@ td.nonzero {
 .breadcrumb-arrow li span {
     color: #434a54
 }
+.toolbargrid{
+  margin:10px;
+  display:grid;
+  grid-template-columns:400px 800px 400px;
+}
+.nodeshape {
+  margin:10px;
+  display:grid;
+  grid-template-columns:30px 300px 30px 300px;
+}
+
+.nodeshape-left{
+  height:30px;
+  width:30px;
+}
+
+.nodeshape-right{
+  font-size:16px;
+  padding: 7px 0 7px 10px;
+}
+
 </style>
 <script>
 var colorPicker = d3.scaleLinear().domain([0, 0.5, 1.0]).range(["blue", "white", "red"]);
@@ -283,11 +299,11 @@ $(function(){
             'font-size': function(ele){
               var eData=ele.data();
               if(eData["is_exemplar"]==2){
-                return 50;
+                return 60;
               } else if(eData["is_exemplar"]==1){
-                return 20;
+                return 40;
               } else{
-                return 10;
+                return 20;
               }
             },
             'color': function(ele){
@@ -303,7 +319,6 @@ $(function(){
             'border-color':'gray',
             'shape': function(ele){
               var eData = ele.data();
-              /* for now, support up to 3 platforms */
               if(eData["platform"] == 1){
                 return "ellipse";
               } else if (eData["platform"] == 2){
@@ -420,6 +435,29 @@ $(function(){
     });
 
     $(".chzn-cy-export").chosen({disable_search_threshold: 5}).change(function(){
+    });
+
+    $(".chzn-label-select").chosen({disable_search_threshold: 5}).change(function(){
+      var selected_val = $(this).val();
+      if(selected_val == "hide1"){
+        cy.style().selector('node[is_exemplar=0]').style({
+          'font-size': 0
+        }).update();
+      } else if(selected_val == "hide12"){
+        cy.style().selector('node[is_exemplar=0], node[is_exemplar=1]').style({
+          'font-size': 0
+        }).update();
+      } else if(selected_val == "showall"){
+        cy.style().selector('node[is_exemplar=0]').style({
+          'font-size': 20
+        }).update();
+        cy.style().selector('node[is_exemplar=1]').style({
+          'font-size': 40
+        }).update();
+        cy.style().selector('node[is_exemplar=2]').style({
+          'font-size': 60
+        }).update();
+      }
     });
 });
 </script>

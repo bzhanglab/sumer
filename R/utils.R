@@ -25,8 +25,8 @@ gmt2list <- function(gmt_file){
 
 # for cytoscape, set node size
 computeNodeDim <- function(maxVal, minVal, val){
-  maxCyNodeSize<-100;
-  minCyNodeSize<-5;
+  maxCyNodeSize<-200;
+  minCyNodeSize<-50;
   return((val-minVal)/(maxVal-minVal)*(maxCyNodeSize-minCyNodeSize)+minCyNodeSize)
 }
 

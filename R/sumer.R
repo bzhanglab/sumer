@@ -121,6 +121,13 @@ sumer <- function(config_file, output_dir, n_threads=4){
   ap_data$genesetInfo <- genesetInfo
   ap_results <- affinityPropagation(ap_data)
 
+  platform_shape_icon <- c("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAALFQTFRFAAAALi4u////KCgocnJyU1NTXFxcX19fYmJiZmZmbGxsZWVldnZ2ZGRkVFRULS0tS0tLX19fcHBwgYGBjY2NlJSUU1NTa2tri4uLsbGx0tLSQEBAY2NjioqKwsLCUFBQbm5up6enT09PcnJyuLi4MzMzMjIyY2Njp6eniYmJampqSkpKi4uLsbGxgICA5+fn8vLy9vb27+/v/v7+////6urq+Pj4+/v76enp7u7u0tLS+nIsWQAAAC90Uk5TAAAAAAAAAAAAAAAAAAAAABBFhbjY5RRlv/D+A0fB+wl07AiE9wICSOvAZRG+77h1H7CsAAAAAWJLR0QCZgt8ZAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAONJREFUKM+Nk9cSgjAQRVcUG6h0EARRsILSIpb//zB1wFGUsJ7HnJlMsnsvQEGLEURJVlRVkSVRYFrwSbuj6cbUjOIkiSNzauhap/22rDWznTQjJVnq2DOLfdnu3F2cSIXTwp13C9tben5Ovsh9b9l72v7K9c/kh7PvrvsAg+Fmm5Ma8u1mOABO211ILZedxgGvO4SCs+chCK80fQ0DEA+EykEE6UbXNwnkiK6jIygxXccKqAldJyqmkcuPzU9DPoaMBRkqv29cSeNCR1gckDBhUcSCDDCuq8H43xI9mFQrOCmP71sujvnFJVioAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTAxLTIwVDEwOjI5OjM5LTA2OjAwBp+AHAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0wMS0yMFQxMDoyOTozOS0wNjowMHfCOKAAAAAASUVORK5CYII=",
+                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAZJQTFRFAAAAZmZme3t7ZGRkZWVlampqaGhoa2trfn5+XFxcFhYWX19fYGBgYmJiXl5eZ2dnbGxsbW1tgICAz8/PaWlpNjY2eHh4LCwsV1dXZmZmXFxckpKSODg4d3d3YWFhqqqqTk5OhISEaWlpvLy8V1dXk5OTDg4OcXFxPj4+VFRUYmJicHBwf39/rq6uaWlpY2NjXl5eaWlpeXl5jIyMoqKiurq6Y2NjcHBwqKioycnJU1NTbW1ttbW1SkpKcXFxv7+/UFBQd3d3ysrKVFRUfn5+WFhYhoaGW1tbjo6OXV1dq6urWFhYqqqqXl5etra2ZWVlwcHBa2trcnJyeXl50dHRoqKie3t7AAAAgoKCxMTElZWVcnJyWVlZOzs7ODg4iIiIt7e3ioqKampqU1NTDQ0NX19fcHBwe3t7Y2NjTExMcHBwampqY2NjT09P19fX/Pz85eXl////8fHxz8/P+fn509PT6Ojo+vr639/f+/v7/f391NTU3d3d5ubm/v7+zMzM1tbW4ODg9fX16enp7e3t1dXVCg2e0QAAAG50Uk5TAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHQn2wSTQ+0OtGP5H9EEhwojSHap7wMWNWCRvuH3Ibvx/QRw9gaD+gyX/RSqHrwrzEXvLOk89FD6ZHqQ/uScAqX7038sAwi59b5kGwENsalLDrACGgcESF/KAAAAAWJLR0Rxrwdc4gAAAAlwSFlzAAALEwAACxMBAJqcGAAAAZtJREFUKM9jYEACjEySkkyMDLgAs5S0tBQzLlkWGdm8PFkZFuyyrGxy8vn58nJs7NiNVlAsKCwsUFTAajwjh5JyIRAoK3Fgcx2zimoRSLpIVQWLdk419eJCMChWV+NEluFi0NDU0tbRLYFIl+jqaGtpagCFgUBP38DQyNjEtLSsvBAKystKTU2MjQwN9PUYzMwtLCuK8gvRQH5RhaWFuRmDlbVNZSFWUGljbcXAbWtnX4VNtsrezpabgYHbwdEJm7STowM3yHE8zi7VmLLVLs48YH/x8rq61aDL1ri58vJC/M3H4u5Riypb6+HOwgcLFx52T686ZNk6L092HqTo8PZBlfbxRo4Wfl8/VMP9fPmRU4J/AKp0gD8rQlZAMLAeVbo+UFAAYbZQUAMkMioqIBHTECSEMJ1ROLgRKNYUEhoWFhrSBGQ2Bgsj3CYSHtFc2BIZFR0TGxsTHRXZUtgcES6CMDwuvjUhMSk5RZSBQTQlOSkxoTU+DmE4f2paekammDiEJy6WmZGelYqQZsvOyZVATl4SuTnZbAwUAwB/NrNNJ6AXQgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOS0wMS0yMFQxMDoyOTozOC0wNjowMKDoi6gAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTktMDEtMjBUMTA6Mjk6MzgtMDY6MDDRtTMUAAAAAElFTkSuQmCC",
+                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAURQTFRFAAAAREREampqUlJSW1tbTExMg4ODVFRUX19fT09PV1dXQEBAaWlp8fHxaGhoZmZmZ2dn////bW1tb29vZWVlWFhYdHR0MTExYGBgioqKzs7OUFBQbW1toqKiWlpafX19vb29REREZGRkkpKSU1NTcnJyq6urXV1dg4ODx8fHS0tLaGhompqaV1dXd3d3tbW1YWFhZWVli4uL0NDQYGBgW1tbjo6OTU1NkpKSdnZ2YmJit7e3Tk5OlZWVeXl5ZGRku7u7UVFRmJiYAAAAe3t7ZmZmv7+/U1NTnJycDg4Ofn5+aGhow8PDVVVVoKCgKioqgYGBampqx8fHXV1dkZGRwMDAwMDAZ2dnY2NjYmJiYmJi5+fn////9/f32NjY/v7+7u7u+vr64eHh8/Pz/Pz89PT02tra9vb23d3d+fn55OTk+/v7r5zijQAAAFt0Uk5TAAAAAAAAAAAAAAAAAAAAAAAAAAAAH6MBP8L+DHDmJqX5BE/SE4PuMrb8CGDdHJX1AkDF/gIp2BbJiUb1FtCRTvga1QGZVfoe2gOhXPsj3wWoY/0o3/37BDxOTeeCqigAAAABYktHRBHitT26AAAACXBIWXMAAAsTAAALEwEAmpwYAAABXklEQVQoz6XS6V8BQRjA8bEq0rJDOuTKkask5L6lXDkjamfDOlL+//dtm4SdfdXv5Xw/My/meQD4S0IcHR8fERKATXpyqjs7052eSHG6ozcYaYRoo0G/I8DdPZP5nEFczLnZtLe7qTKL1fY2QHyDN5vVIlu/KrdfOIZo1dBxYZevHtgHTpd7hNYauV1O7phP4bm8YtFW7NWlR8HhAem99o2RoLHv2ksegBt/IDhBmCbBgP8WhMI0EokOh0AkOhXjaTQClLGZGM9iSqCKJ8Q4EVcBKpl6x+t7KkkBqE7P8TxPqyEAZCaL52yG5P6FyuUZnDL5HMUxvCuwOGYLd/D7z4n7Bxw/3BP8SKhi6UOoH6UixTMsVz6F/Fkp828DUlN9FPJjVUP+DJyq1RfbuqjXqOW2wEZTMDW62YBLJg5b7W1utw6J32XTPnW6zxt1O0/a1abCXv/ldaOXfg+Cf/cFYFfMX1Iw/JsAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMDEtMjBUMTA6Mjk6NDAtMDY6MDCZwszWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTAxLTIwVDEwOjI5OjQwLTA2OjAw6J90agAAAABJRU5ErkJggg==",
+                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAWCAMAAADgvdz9AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAOpQTFRFAAAAZGRkbW1tZ2dnYmJiY2NjaWlpa2trcXFxfn5+oaGhZWVlSkpKaGhoYWFhnZ2dVFRUhoaGKSkpcXFxx8fHYmJip6enVlZWi4uLPz8/dHR0ZGRkra2tWFhYj4+PR0dHeHh4Z2dns7OzZmZmWlpalJSUTExMfHx8aWlpubm5XFxcmpqaT09PgICAbGxsv7+/X19fn5+fUlJShISEFRUVb29vxcXFY2NjpKSkaGho5ubm////+vr66enpzc3N+/v77e3t09PT/f398PDw2NjY/v7+8/Pz3d3d9vb24uLi9/f3j4+Po6OjoaGh3sU68gAAADp0Uk5TAAAAAAAAAAAAAAAAAXw85hW7AoD9RusaxASMUPAhzQeXWvRaKNUKomX3MNwOrHD6OOMStgJ6/Evnw/hwpNMAAAABYktHRDs5DvRsAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA+UlEQVQoz3XQ5ZLCQBBG0R5GkODusCzubo0Ggu/7v85SQEESJufvrfmqegB0iNvjcROwYKNen89LbRaZ+QPzecDP5JUHQ2HEcCjIZVXYI9EF4iIasQvZdCy+xLtlPCaZ54nkCh9WycTXvHCk0utnXqdTDvM8z2Q3+LLJZkzPeS6/xbdtPmfoxPlTUD9ZLfw6dZ9HSbG0Q51dqUjo56ZyZY8G+0r5fR1xVWuaMWu1qus1L5R644Amh0ZdeV7Hmq0jfjm2mo95BdodlOi07wkE7fZOsnzqdakA1h+cUeo86DMYjsZoYTwawmR60VQp7TKdwOx6+7Nwu87+Aaz1VAtqSkSdAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTAxLTIwVDEwOjI5OjQxLTA2OjAwP7XHYgAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0wMS0yMFQxMDoyOTo0MS0wNjowME7of94AAAAASUVORK5CYII=",
+                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAdCAMAAACKeiw+AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAFFQTFRFAAAAWFhYYWFhVFRUZGRkcnJydHR0VlZWdnZ2r6+vcHBwvr6+WlpanZ2dbW1ty8vLgYGBj4+PlZWV19fX3Nzc/Pz8////9/f36Ojo9PT09vb2wCJ8IgAAABN0Uk5TAAAACEZ8hQ2O83b7LNx7/bvc5UDOsoIAAAABYktHRBZ80agZAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAY0lEQVQoz93RSRKAIAwEwGFTUTZFQfj/Q/0AMXf6OpXKBkxLKG2WAaOVAOS62XwPZLutEtiPpww9xw44XwuheocQCykGpJeO34Sz0XE7cXU67hdXzfRmJmf2Zq7G3fz/Y7P6ADbLIAFPjmEKAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTAxLTIwVDExOjE1OjEyLTA2OjAwGPWMkQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0wMS0yMFQxMToxNToxMi0wNjowMGmoNC0AAAAASUVORK5CYII=",
+                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeBAMAAADJHrORAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAACpQTFRFAAAAXV1dVVVVbW1tTk5OcnJyubm5cXFxu7u7VFRUubm5+/v7/////Pz8iaLSqAAAAAt0Uk5TAAALjwmD+IT4C/f1byodAAAAAWJLR0QMgbNRYwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAH5JREFUGNNjYAADIWNFBiTA6JoWIoDEF6nY3e6IJO3efWZHiQCS9J4zpxEKQNJnkBSApM8gFECkEQog0nAFMGmYApg0VAFCGqIAIQ1RMBUhDVQQyWB1B4l/djEGH109unno9qG7B8O96P7B8C96eGCEF3p4YoQ3enxgxBciPgEAv7RdD/xsFQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOS0wMS0yMFQxMDoyOTo0MS0wNjowMD+1x2IAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTktMDEtMjBUMTA6Mjk6NDEtMDY6MDBO6H/eAAAAAElFTkSuQmCC",
+                           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAMAAACXfxyGAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAQJQTFRFAAAAZWVlZmZmampqZGRkhYWFZ2dncnJy////enp6aWlplJSUdnZ2VVVVcnJyh4eHioqKiYmJcXFxYmJiq6urUFBQhoaGampqv7+/WFhYlZWVIiIidHR0X19fpaWlS0tLgICAZmZmt7e3VVVVjo6Ob29vycnJXFxcnp6eeXl5eXl5XV1doKCgcXFxVlZWkZGRaWlpvLy8T09PhISEYWFhrKysPz8/eXl5W1tbnZ2dcHBwysrKVVVVj4+PaGhourq6VVVVe3t78PDw8fHx5+fn////8vLy0dHR+vr64eHh7u7u9/f32dnZ2tra+Pj4zMzM5ubm/Pz87+/v/f39np6eoaGh72rD8AAAAEJ0Uk5TAAAAAAAAAAAAAAAAAAeQ1tTUkEfvEblo+iPUAoo76QusWfYayXr+Nt+vsDjgfx3OYvkPtkbvBZou33z+G8td9w+7LHUOhgAAAAFiS0dECIbelXoAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEfSURBVCjPdZJnd4JAEEUHXRds0cTee++9N3RtYI35/38lKJEoLPfrPfP27MwDuMPYPxzOTwWn48vOgILB6HLzyxd4t8toUDTyeFfkjZXXg56WMfn8RIXfZ3rGo0BwrdbrYOBv3BAKb4iGTTgkv44j0a1Wb6MR/IiOxXeEwi4ek+Ixm0gSKskEiwGl0nu63qdTCLhMluiQzXCQywt6WsjnoCASXcQCFA/6+lCEUvmoZ4/lEkDlpKdPFWkr1RpPt3ytigCb6w26btTN0lpRs3Wm2XOreb8Za2l3Llp76bQt7KMN3R7l72KvK/fByvQHms0Jgz5jlfuAueFIrUdDDitVHE+u7/Y6GStVBGybzr7fmE1t+L/oaL64/bxwW8zl4V/ItJ8bdLPi4gAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOS0wMS0yMFQxMDoyOTozOC0wNjowMKDoi6gAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTktMDEtMjBUMTA6Mjk6MzgtMDY6MDDRtTMUAAAAAElFTkSuQmCC")
   # add results to webpage
   cat("<div style=\"margin-left:10px\" id=\"results\">", file=output_index_file, append=TRUE)
   cat("<h4> Original gene sets</h4>\n", file=output_index_file,append=TRUE,sep="")
@@ -151,23 +158,31 @@ sumer <- function(config_file, output_dir, n_threads=4){
   }
 
   cat("</div><h4>Summary of top gene sets from all platforms </h4>\n", file=output_index_file, append=TRUE)
-  cat("<div id='apcy_notes' style='border: 1px solid gray; border-radius: 5px;background-color:#F4F6F6;width:1210px;margin-bottom:30px;padding:5px;'>
+  cat("<div id='apcy_notes' style='border: 1px solid gray; border-radius: 5px;background-color:#F4F6F6;width:1610px;margin-bottom:30px;padding:5px;'>
       <ul>
       <li>Clustering is performed using <a target='_new' href='https://www.psi.toronto.edu/affinitypropagation/'>affinity propagation</a> algorithm.</li>
       <li>Each node represents a gene set. </li>
       <li>Size of nodes represents the relative number of genes in the set. </li>
-      <li>Node shape maps to omics platform (e.g., RNA-seq, Proteomics, Phosphoproteomics). </li>
-      <li>Node color maps to value of scores. </li>
+      <li>Node shape maps to omics platform. </li>\n", file=output_index_file, append=TRUE)
+  cat('<div class="nodeshape">\n', file=output_index_file, append=TRUE)
+  for(i in seq_len(n_platform)) {
+    cur_config <- config[i,]
+    cur_platform <- cur_config[["platform_name"]]
+    cat('<div class="nodeshape-left" style="background: url(', platform_shape_icon[i], ') no-repeat">\n', file=output_index_file, sep='', append=TRUE)
+    cat('</div>\n', file=output_index_file, append=TRUE)
+    cat('<div class="nodeshape-right">', cur_platform, '</div>\n', file=output_index_file, sep='', append=TRUE)
+  }
+  cat("</div><li>Node color maps to value of scores. </li>
       </ul>
 </div>\n", file=output_index_file, append=TRUE)
-  cat('<div id="cy_toolbar">
-      <div id="cy_layout_choice" style="float:left; margin-bottom:0px;">Select a layout style:
-      <select class="chzn-layout-select" name="cy_layout_select" style="width:250px;">
+  cat('<div class="toolbargrid">
+      <div id="cy_layout_choice" style=" margin-bottom:0px;">Select a layout style:
+      <select class="chzn-layout-select" name="cy_layout_select" style="width:150px;">
       <option value="cose-bilkent">CoSE-Bilkent</option>
       <option value="dagre">Dagre</option>
       </select>
   </div>
-  <div id="cy_search" style="margin-left:20px;float:left;">Search:
+  <div id="cy_search" style="margin-left:20px;">Search:
       <select class="chzn-cy-search-select" data-placeholder="search gene set..." name="cy_search_select" style="width:500px;">
       <option value=""></option>\n', file=output_index_file, append=TRUE)
 
@@ -186,8 +201,16 @@ sumer <- function(config_file, output_dir, n_threads=4){
     cat("<option value='", node_id, "'>", gsub("_", " ", node_id),"</option>\n", sep="", file=output_index_file, append=TRUE)
   }
 
-  cat("</select>\n</div>\n</div>\n", file=output_index_file, append=TRUE)
-  cat("<div id='apcy_info' style='margin-top:0px;margin-bottom:20px;'>\n", file=output_index_file, append=TRUE)
+  cat("</select>\n</div>\n", file=output_index_file, append=TRUE)
+  cat('<div id="cy_label_choice" style="margin-bottom:0px;">Show/hide label:
+<select class="chzn-label-select" name="cy_label_select" style="width:200px;">
+<option value="showall">Show all labels</option>
+<option value="hide1">Hide first level label</option>
+<option value="hide12">Hide first and second level label</option>
+</select>
+</div>
+</div>\n', file=output_index_file, append=TRUE)
+  cat("<div id='apcy_info' style='margin:0 0 20px 10px;'>\n", file=output_index_file, append=TRUE)
   cat("<span style='display:inline-block; margin-right:5px;'><a id='acpy_download_data' href='", ap_results[['zip']], "' download class='chosen-button'>Download data</a></span>\n", file=output_index_file, sep="", append=TRUE)
   cat("<select data-placeholder='export network as...' class='chzn-cy-export' style='width:200px;' id='cytscp_exp_sel'>
       <option value=''></option>
