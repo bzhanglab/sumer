@@ -95,8 +95,8 @@ topGeneSets <- function(cur_config, geneset_ids, geneset_info, output_dir, prefi
 				 topset.png <- file.path(output_dir, paste0(prefix,"topsets.png"))
 				 topset.pdf <- file.path(output_dir, paste0(prefix,"topsets.pdf"))
 
-				 ggsave(topset.png, width = 10, height = 0.2*num.rows + 1, dpi = 300, my_plot)
-				 ggsave(topset.pdf, width = 10, height = 0.2*num.rows + 1, dpi = 300, my_plot)
+				 ggsave(topset.png, width = 10, height = 0.2*num.rows + 1, dpi = 300, my_plot, limitsize=FALSE)
+				 ggsave(topset.pdf, width = 10, height = 0.2*num.rows + 1, dpi = 300, my_plot, limitsize=FALSE)
 
          dev.off()
 				 return(list(topset.num=num.rows, topset.png=basename(topset.png),
