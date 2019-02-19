@@ -65,18 +65,20 @@ weightedSetCover <- function(cur_config, geneset_ids, geneset_info, output_dir, 
     # first remove the one just been selected
     candidates <- candidates[-1,]
     # recalculate gain, remove rows with gain == 0
-    mc_results <- mclapply(seq(nrow(candidates)), function(row, candidates, cur_res, geneset_ids, geneset_info){
-                             cur_name <- candidates[row, "geneset.name"]
-                             cur_gain <- marginalGain(cur_name, cur_res, geneset_ids, geneset_info)
-                             if(cur_gain != 0) {
-                               candidates[candidates$geneset.name == cur_name, "gain"] <- cur_gain
-                               tmp_candidate <- candidates[candidates$geneset.name == cur_name,]
-                               return(tmp_candidate)
-                             }
-                        }, candidates=candidates, cur_res=cur_res, geneset_ids=geneset_ids, geneset_info=geneset_info, mc.cores=n_threads)
+    if(nrow(candidates) > 0){  # seq(0) = 1 0
+      mc_results <- mclapply(seq(nrow(candidates)), function(row, candidates, cur_res, geneset_ids, geneset_info){
+                               cur_name <- candidates[row, "geneset.name"]
+                               cur_gain <- marginalGain(cur_name, cur_res, geneset_ids, geneset_info)
+                               if(cur_gain != 0) {
+                                 candidates[candidates$geneset.name == cur_name, "gain"] <- cur_gain
+                                 tmp_candidate <- candidates[candidates$geneset.name == cur_name,]
+                                 return(tmp_candidate)
+                               }
+                          }, candidates=candidates, cur_res=cur_res, geneset_ids=geneset_ids, geneset_info=geneset_info, mc.cores=n_threads)
 
-    new_candidates <- mc_results %>% bind_rows()
-    candidates <- new_candidates
+      new_candidates <- mc_results %>% bind_rows()
+      candidates <- new_candidates
+    }
   }
   # not fully covered, compute the current coverage and return
   covered_genes <- unique(unlist(geneset_ids[cur_res]))
