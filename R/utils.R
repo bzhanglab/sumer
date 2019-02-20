@@ -33,7 +33,19 @@ computeNodeDim <- function(maxVal, minVal, val){
 
 # set color: min: blue, middle: white, max: red
 computeNodeColor <- function(maxVal, minVal, val){
-  maxColor <- 1;
-  minColor <- 0;
+  # if all positive, map to [0.5, 1]
+  if(minVal > 0){
+    maxColor <- 1;
+    minColor <- 0.5;
+  } else if(maxVal < 0) {  # all negative
+    maxColor <- 0.5;
+    minColor <- 0;
+  } else {
+    larger = Math.max(maxVal, Math.abs(minVal));
+    maxVal <- larger;
+    minVal <- -1.0*larger;
+    maxColor <- 1;
+    minColor <- 0;
+  }
   return((val-minVal)/(maxVal-minVal)*(maxColor-minColor)+minColor)
 }
