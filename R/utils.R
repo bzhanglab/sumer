@@ -41,7 +41,7 @@ computeNodeColor <- function(maxVal, minVal, val){
     maxColor <- 0.5;
     minColor <- 0;
   } else {
-    larger = Math.max(maxVal, Math.abs(minVal));
+    larger = max(maxVal, abs(minVal));
     maxVal <- larger;
     minVal <- -1.0*larger;
     maxColor <- 1;
