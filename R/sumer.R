@@ -37,7 +37,7 @@ sumer <- function(config_file, output_dir, n_threads=4){
   all_platform_abbr <- c()
 
   # plot the original data
-  all_data <- data.frame(platfrom=character(), name=character(), size=integer(), score=numeric)
+  all_data <- data.frame(platfrom=character(), name=character(), size=integer(), score=numeric())
 
   # save the name of output directory for each platform
   work_dirs <- list()
