@@ -33,6 +33,7 @@ sumer <- function(config_file, output_dir, n_threads=4){
   cat('</ol>\n</div>\n', file=output_index_file, append=TRUE, sep='')
 
   config <- full_config$data
+  sim <- full_config$similarity
   n_platform <- nrow(config)
   all_platform_abbr <- c()
 
@@ -119,7 +120,7 @@ sumer <- function(config_file, output_dir, n_threads=4){
 
   ap_data$genesetIds <- genesetIds
   ap_data$genesetInfo <- genesetInfo
-  ap_results <- affinityPropagation(ap_data)
+  ap_results <- affinityPropagation(ap_data, sim)
 
   platform_shape_icon <- c("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAALFQTFRFAAAALi4u////KCgocnJyU1NTXFxcX19fYmJiZmZmbGxsZWVldnZ2ZGRkVFRULS0tS0tLX19fcHBwgYGBjY2NlJSUU1NTa2tri4uLsbGx0tLSQEBAY2NjioqKwsLCUFBQbm5up6enT09PcnJyuLi4MzMzMjIyY2Njp6eniYmJampqSkpKi4uLsbGxgICA5+fn8vLy9vb27+/v/v7+////6urq+Pj4+/v76enp7u7u0tLS+nIsWQAAAC90Uk5TAAAAAAAAAAAAAAAAAAAAABBFhbjY5RRlv/D+A0fB+wl07AiE9wICSOvAZRG+77h1H7CsAAAAAWJLR0QCZgt8ZAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAONJREFUKM+Nk9cSgjAQRVcUG6h0EARRsILSIpb//zB1wFGUsJ7HnJlMsnsvQEGLEURJVlRVkSVRYFrwSbuj6cbUjOIkiSNzauhap/22rDWznTQjJVnq2DOLfdnu3F2cSIXTwp13C9tben5Ovsh9b9l72v7K9c/kh7PvrvsAg+Fmm5Ma8u1mOABO211ILZedxgGvO4SCs+chCK80fQ0DEA+EykEE6UbXNwnkiK6jIygxXccKqAldJyqmkcuPzU9DPoaMBRkqv29cSeNCR1gckDBhUcSCDDCuq8H43xI9mFQrOCmP71sujvnFJVioAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTAxLTIwVDEwOjI5OjM5LTA2OjAwBp+AHAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0wMS0yMFQxMDoyOTozOS0wNjowMHfCOKAAAAAASUVORK5CYII=",
                            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAZJQTFRFAAAAZmZme3t7ZGRkZWVlampqaGhoa2trfn5+XFxcFhYWX19fYGBgYmJiXl5eZ2dnbGxsbW1tgICAz8/PaWlpNjY2eHh4LCwsV1dXZmZmXFxckpKSODg4d3d3YWFhqqqqTk5OhISEaWlpvLy8V1dXk5OTDg4OcXFxPj4+VFRUYmJicHBwf39/rq6uaWlpY2NjXl5eaWlpeXl5jIyMoqKiurq6Y2NjcHBwqKioycnJU1NTbW1ttbW1SkpKcXFxv7+/UFBQd3d3ysrKVFRUfn5+WFhYhoaGW1tbjo6OXV1dq6urWFhYqqqqXl5etra2ZWVlwcHBa2trcnJyeXl50dHRoqKie3t7AAAAgoKCxMTElZWVcnJyWVlZOzs7ODg4iIiIt7e3ioqKampqU1NTDQ0NX19fcHBwe3t7Y2NjTExMcHBwampqY2NjT09P19fX/Pz85eXl////8fHxz8/P+fn509PT6Ojo+vr639/f+/v7/f391NTU3d3d5ubm/v7+zMzM1tbW4ODg9fX16enp7e3t1dXVCg2e0QAAAG50Uk5TAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHQn2wSTQ+0OtGP5H9EEhwojSHap7wMWNWCRvuH3Ibvx/QRw9gaD+gyX/RSqHrwrzEXvLOk89FD6ZHqQ/uScAqX7038sAwi59b5kGwENsalLDrACGgcESF/KAAAAAWJLR0Rxrwdc4gAAAAlwSFlzAAALEwAACxMBAJqcGAAAAZtJREFUKM9jYEACjEySkkyMDLgAs5S0tBQzLlkWGdm8PFkZFuyyrGxy8vn58nJs7NiNVlAsKCwsUFTAajwjh5JyIRAoK3Fgcx2zimoRSLpIVQWLdk419eJCMChWV+NEluFi0NDU0tbRLYFIl+jqaGtpagCFgUBP38DQyNjEtLSsvBAKystKTU2MjQwN9PUYzMwtLCuK8gvRQH5RhaWFuRmDlbVNZSFWUGljbcXAbWtnX4VNtsrezpabgYHbwdEJm7STowM3yHE8zi7VmLLVLs48YH/x8rq61aDL1ri58vJC/M3H4u5Riypb6+HOwgcLFx52T686ZNk6L092HqTo8PZBlfbxRo4Wfl8/VMP9fPmRU4J/AKp0gD8rQlZAMLAeVbo+UFAAYbZQUAMkMioqIBHTECSEMJ1ROLgRKNYUEhoWFhrSBGQ2Bgsj3CYSHtFc2BIZFR0TGxsTHRXZUtgcES6CMDwuvjUhMSk5RZSBQTQlOSkxoTU+DmE4f2paekammDiEJy6WmZGelYqQZsvOyZVATl4SuTnZbAwUAwB/NrNNJ6AXQgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOS0wMS0yMFQxMDoyOTozOC0wNjowMKDoi6gAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTktMDEtMjBUMTA6Mjk6MzgtMDY6MDDRtTMUAAAAAElFTkSuQmCC",
@@ -252,6 +253,15 @@ check_config <- function(config_file) {
   }
   if (! "top_num" %in% names(old_config)) {
     old_config$top_num <- 50
+  }
+  # currently only support Jaccard or Simpson
+  if ("similarity" %in% names(old_config)){
+    sim <- old_config$similarity
+    if (sim != "Jaccard" && sim != "Simpson" && sim != "Dice"){
+      stop("similarity can be: Jaccard or Simpson or Dice")
+    }
+  } else{
+    sim <- "Jaccard"
   }
   config <- old_config$data
   n_platform <- nrow(config)

@@ -10,7 +10,7 @@
 #' @importFrom apcluster aggExCluster
 #' @importFrom jsonlite unbox toJSON
 #' @import proxy
-affinityPropagation <- function(ap.data, sim="Simpson"){
+affinityPropagation <- function(ap.data, sim="Jaccard"){
   output.dir <- ap.data$output.dir
   genesetIds <- ap.data$genesetIds
   genesetInfo <- ap.data$genesetInfo
@@ -39,9 +39,7 @@ affinityPropagation <- function(ap.data, sim="Simpson"){
   genesetIds2 <- genesetIds[names(exemplars)]
   genesetInfo2 <- genesetInfo[names(exemplars)]
   if(length(clusters) > min.num.clusters){
-    if(sim == "Jaccard"){
-      ret2 <- jaccardSim(genesetInfo2, genesetIds2)
-    }
+    ret2 <- simFunc(genesetInfo2, genesetIds2, sim)
     sim.mat2 <- ret2$sim.mat
     ap.result2 <- apcluster(sim.mat2)
     clusters2 <- ap.result2@clusters
@@ -143,7 +141,7 @@ affinityPropagation <- function(ap.data, sim="Simpson"){
 }
 
 
-simFunc <- function(genesetInfo, genesetIds, method="Simpson"){
+simFunc <- function(genesetInfo, genesetIds, method="Jaccard"){
   # first find out the union of sets, sorted
   all.genes <- sort(unique(unlist(genesetIds)))
   overlap.mat <- sapply(genesetIds, function(x) {as.integer(all.genes %in% x)})
@@ -174,7 +172,6 @@ simFunc <- function(genesetInfo, genesetIds, method="Simpson"){
   })
   max.minus.logP <- max(all.minus.logP)
   min.minus.logP <- min(all.minus.logP)
-  # for Jaccard
   #minScore <- min(sim.mat)
   minScore <- 0
   #maxScore <- max(sim.mat)

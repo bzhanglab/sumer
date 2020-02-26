@@ -1,6 +1,6 @@
 Package: sumer
 Title: SUmmarizing Multiple Enrichment analysis Results
-Version: 1.1.3
+Version: 1.1.4
 Authors@R: person("Zhiao", "Shi", email = "zhiao.shi@gmail.com", role = c("aut", "cre"))
 Description: Summarizes multiple enrichment analysis results with weighted
              set cover and affinity propagation clustering algorithms. It therefore reduces redundancy among enriched 

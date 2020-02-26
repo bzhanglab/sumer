@@ -51,7 +51,8 @@ A sample configuration file is shown below:
       "gmt_file":"/data/phospho_proteomics.gmt",
       "score_file":"/data/phospho_proteomics_score.txt"
     }
-  ]
+  ],
+ "similarity": "Jaccard"
 }
 ```
 
@@ -61,11 +62,13 @@ The keys for the configuration file are explained in the following table.
 .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-.tg .tg-h6ay{background-color:#f9f9f9;border-color:inherit;text-align:left}
 .tg .tg-v47y{font-weight:bold;border-color:#000000;text-align:left}
+.tg td{background-color:#f9f9f9;border-color:inherit;text-align:left}
+<!-- .tg .tg-h6ay{background-color:#f9f9f9;border-color:inherit;text-align:left}
 .tg .tg-xldj{border-color:inherit;text-align:left}
 .tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}
 .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+-->
 </style>
 <table class="tg" style="margin-top:10px; margin-left:0px;width:100%;">
   <tr>
@@ -80,6 +83,12 @@ The keys for the configuration file are explained in the following table.
     <td class="tg-xldj">top_num</td>
     <td class="tg-xldj">maximum number of top sets selected by set cover algorithm</td>
   </tr>
+<tr>
+    <td>similarity</td>
+    <td>(optional) Similarity measure for gene sets, default is "Jaccard". The other supported
+        measure is "Simpson".
+        </td>
+  </tr>
   <tr>
     <td class="tg-btxf">data               </td>
     <td class="tg-btxf">an array of objects that describe the data for each platform</td>
@@ -89,7 +98,7 @@ The keys for the configuration file are explained in the following table.
     <td class="tg-0pky"></td>
   </tr>
   <tr>
-    <td class="tg-btxf">platform</td>
+    <td class="tg-btxf">platform_name</td>
     <td class="tg-btxf">name of platform</td>
   </tr>
   <tr>
