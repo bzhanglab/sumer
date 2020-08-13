@@ -77,7 +77,7 @@ is the same format as described
 The `score_file` lists the measurement of significance for each gene
 set. There is one row for each gene set. The first column is the gene
 set name and second column is the score for the set. Typical examples of
-the score value are signed <img src="https://latex.codecogs.com/gif.latex?-\log\{p-value\}" title="-\log\{pvalue\}" />  or signed
+the score value are signed <img src="https://latex.codecogs.com/gif.latex?-\log\{pvalue\}" title="-\log\{pvalue\}" />  or signed
 <img src="https://latex.codecogs.com/gif.latex?-\log\{FDR\}" title="-\log\{FDR\}" />. Columns are separated by tab.
 
 The gene set names in `gmt_file` and `score_file` should match.
