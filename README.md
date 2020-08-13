@@ -1,5 +1,15 @@
+# SUMER
+
 An R package for summarizing multiple enrichment analysis results
 
+
+# Installation
+```r
+# install.packages("devtools")
+devtools::install_github("bzhanglab/sumer")
+```
+
+# Usage 
 The main function of the package is `sumer()`. This function takes two
 parameters. The first parameter is the name of a file in json format
 that, among other things, specifies the location of input data files for
@@ -7,13 +17,14 @@ each omics platform. The second parameter specifies the location of
 output files. Currently, enrichment results from up to 7 platforms can
 be summarized with `sumer()`.
 
-``` {.sourceCode .r}
+
+```r
 sumer("/path/to/config.json", "/path/to/output_dir")
 ```
 
 A sample configuration file is shown below:
 
-``` {.sourceCode .js}
+```js
 {
   "project":"My study",
   "top_num": 50,
@@ -74,7 +85,7 @@ To run the sample data provided by the package, first make sure the
 working directory (`/path/to/your_work_dir`) and output directory
 (`/path/to/your_output_dir`) exist in your system.
 
-``` {.sourceCode .r}
+```r
 > setwd("/path/to/your_work_dir")
 > file.copy(system.file("data", "sample.tgz", package="sumer"), ".")
 > untar("sample.tgz")
