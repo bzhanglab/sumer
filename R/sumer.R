@@ -63,6 +63,10 @@ sumer <- function(config_file, output_dir, n_threads=4){
     geneset_info <- lapply(score_list, `[`, c(-1))
     geneset_info <- lapply(geneset_info, "as.double")
 
+    # find the intersection
+    common_geneset <- intersect(names(geneset_info), names(geneset_info))
+    geneset_info <- geneset_info[common_geneset]
+    geneset_ids <- geneset_ids[common_geneset]
     save(geneset_info, geneset_ids, file=file.path(cur_output_dir, "genesets.RData"))
     top_ret <- topGeneSets(cur_config, geneset_ids, geneset_info, cur_output_dir)
     sc_ret <- topSCGeneSets(cur_config, geneset_ids, geneset_info, cur_output_dir, n_threads)
