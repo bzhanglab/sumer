@@ -86,7 +86,7 @@ sumer <- function(config_file, output_dir, n_threads=4){
   theme_set(theme_bw())
   myplot <- ggplot(all_data, aes(x=platform, y=score, color=platform)) +
     scale_color_manual(values=c("#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d")) +
-    geom_jitter(aes(size=size), width = 0.25) + guides(color=FALSE) +
+    geom_jitter(aes(size=size), width = 0.25) + guides(color="none") +
     theme(legend.key = element_rect(color=NA, fill = NA))
 
   ggsave(file.path(output_dir, "all_data.png"), dpi = 300, myplot)

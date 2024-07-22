@@ -17,11 +17,10 @@ topGeneSets <- function(cur_config, geneset_ids, geneset_info, output_dir, prefi
 	max_size <- cur_config[["top_num"]]
 	num.rows <- nrow(plot.df)
 	if(nrow(plot.df) > max_size){
-		plot.df <- plot.df[order(-abs(plot.df["score"])),]
+		plot.df <- plot.df[order(-abs(plot.df[["score"]])),]
 		plot.df <- plot.df[1:max_size,]
 		num.rows <- max_size
 	}
-
 
   topsets.out.data <- data.frame(geneset=character(), score=double(), UserID=character(),stringsAsFactors=FALSE)
 
