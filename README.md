@@ -96,3 +96,22 @@ working directory (`/path/to/your_work_dir`) and output directory
 The final output files are in `your_output_dir`. You can open
 `index.html` to explore the summarized results.
 
+
+## Citation
+
+If you use the `sumer` package in your research, please cite the following paper:
+
+Savage, S. R., Shi, Z., Liao, Y., Zhang, B. (2019). "Graph algorithms for condensing and consolidating gene set analysis results." *Molecular & Cellular Proteomics*, 18(8): S141-S152.  
+
+### BibTeX Citation
+```bibtex
+@article{savage2019graph,
+  title     = {Graph algorithms for condensing and consolidating gene set analysis results},
+  author    = {Savage, Sara R and Shi, Zhiao and Liao, Yuxing and Zhang, Bing},
+  journal   = {Molecular \& Cellular Proteomics},
+  volume    = {18},
+  number    = {8},
+  pages     = {S141--S152},
+  year      = {2019},
+  publisher = {ASBMB}
+}
